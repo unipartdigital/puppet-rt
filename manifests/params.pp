@@ -1,3 +1,4 @@
+# RT::Params
 class rt::params {
   $ensure            = 'present'
   $package           = 'rt'

@@ -25,7 +25,7 @@ define rt::siteconfig (
       fail('Value could be String, Hash or Array')
     }
   }  else {
-    fail("Value for must be defined for ${title}")
+    fail("Value must be defined for ${title}")
   }
 
   # Variables

@@ -1,3 +1,4 @@
+# RT::Config
 class rt::config (
   $ensure,
   $config_dir,
