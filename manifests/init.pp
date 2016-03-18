@@ -99,7 +99,9 @@ class rt (
     $web_group
   )
 
-  # Calling other classes
+  anchor {'rt::begin':}
+  anchor {'rt::end':}
+  # Classes
   class {'rt::install':
     ensure         => $ensure,
     package        => $package,
@@ -120,5 +122,8 @@ class rt (
   }
 
   # Order and dependencies
-  Class['rt::install'] -> Class['rt::config']
+  Anchor['rt::begin'] ->
+  Class['rt::install'] ->
+  Class['rt::config'] ->
+  Anchor['rt::end']
 }
