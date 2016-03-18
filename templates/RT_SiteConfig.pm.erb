@@ -1,0 +1,20 @@
+# This file is managed by puppet
+use utf8;
+<% @mergedsiteconfig.each do |key,value| -%>
+  <%- if value.is_a?  Hash-%>
+Set(%<%= key %>,
+<% value.sort.each do |k,v| -%>
+  '<%= k %>' => '<%= v %>',
+<%- end -%>
+);
+<%- elsif value.is_a? Array -%>
+Set(@<%= key %>,
+<% value.sort.each do |v| -%>
+  '<%= v %>',
+<% end -%>
+);
+<%- else -%>
+Set($<%= key %>, '<%= value %>');
+<%- end -%>
+<% end -%>
+1;
