@@ -3,7 +3,7 @@ use utf8;
 <%- if @value.is_a?  Hash-%>
 Set(%<%= @title %>,
 <% @value.sort.each do |k,v| -%>
-<%= k %>' => '<%= v %>',
+  '<%= k %>' => '<%= v %>',
 <%- end -%>
 );
 <%- elsif @value.is_a? Array -%>
