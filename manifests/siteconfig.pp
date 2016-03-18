@@ -14,6 +14,20 @@ define rt::siteconfig (
     $order
   )
 
+  if $value {
+    if $value.is_a(String) {
+      validate_string($value)
+    } elsif $value.is_a(Hash) {
+      validate_hash($value)
+    } elsif $value.is_a(Array) {
+      validate_array($value)
+    } else {
+      fail('Value could be String, Hash or Array')
+    }
+  }  else {
+    fail("Value for must be defined for ${title}")
+  }
+
   # Variables
   $config_d  = hiera('rt::config_d',  $rt::params::config_d)
   validate_absolute_path($config_d)
