@@ -1,4 +1,4 @@
-# rt
+# rt [![Build Status](https://travis-ci.org/spacedog/puppet-rt.svg)](https://travis-ci.org/spacedog/puppet-rt)
 
 #### Table of Contents
 
