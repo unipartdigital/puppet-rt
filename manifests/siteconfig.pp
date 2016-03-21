@@ -43,13 +43,13 @@ define rt::siteconfig (
 
   # Execs
   if $ensure == 'present' {
-    exec { "${target_path} syntax check":
+    exec { "${title} syntax check":
       path        => ['/bin', '/usr/bin'],
       command     => "perl -c ${target_path}",
       refreshonly => true,
     }
     File[$target_path] {
-      notify  => Exec["${target_path} syntax check"]
+      notify  => Exec["${title} syntax check"]
     }
   }
 
