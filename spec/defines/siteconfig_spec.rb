@@ -93,6 +93,12 @@ Set($Test, 'Test value');
         )
       end
     end
+    it "should do syntax check" do
+      params.merge!({ 
+        'value' => 'Test value'
+      })
+      should contain_exec("Test syntax check")
+    end
   end
 end
 

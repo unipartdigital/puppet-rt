@@ -31,7 +31,7 @@ describe('rt::config') do
       'config_dir'        => '/etc/rt',
       'config_site'       => '/etc/rt/RT_SiteConfig.pm',
       'config_d'          => '/etc/rt/RT_SiteConfig.d',
-      'siteconfig'        => {}, 
+      'siteconfig'        => {},
       'defaultsiteconfig' => {
         'rtname'  => 'example.com',
         'WebPath' => '/rt',
@@ -64,6 +64,7 @@ Set($WebPath, '/rt');
     }
   )
   }
+  it { should contain_exec('Site config syntax check') }
 
   end
 end
