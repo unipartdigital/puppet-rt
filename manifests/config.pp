@@ -55,18 +55,25 @@ class rt::config (
   # Configuration options
   $mergedsiteconfig = merge($defaultsiteconfig, $siteconfig)
 
-  exec {'Site config syntax check':
-    path        => ['/bin', '/usr/bin'],
-    command     => "perl -c ${config_site}",
-    refreshonly => true,
+
+  if $ensure == 'present' {
+    exec {'Site config syntax check':
+      path        => ['/bin', '/usr/bin'],
+      command     => "perl -c ${config_site}",
+      refreshonly => true,
+    }
+    File[$config_site]{
+      notify  => Exec['Site config syntax check'],
+    }
   }
+
   file { $config_site:
     ensure  => $ensure,
     mode    => '0640',
     owner   => $web_user,
     group   => $web_group,
     content => template("${module_name}/RT_SiteConfig.pm.erb"),
-    notify  => Exec['Site config syntax check'],
   }
+
 
 }

@@ -41,6 +41,18 @@ define rt::siteconfig (
 
   $target_path = "${config_d}/${order}-${title}.pm"
 
+  # Execs
+  if $ensure == 'present' {
+    exec { "${target_path} syntax check":
+      path        => ['/bin', '/usr/bin'],
+      command     => "perl -c ${target_path}",
+      refreshonly => true,
+    }
+    File[$target_path] {
+      notify  => Exec["${target_path} syntax check"]
+    }
+  }
+
   # Files and Directories
   file { $target_path:
     ensure  => $ensure,
@@ -48,14 +60,7 @@ define rt::siteconfig (
     owner   => $web_user,
     group   => $web_group,
     content => template("${module_name}/RT_SiteConfig-fragment.pm.erb"),
-    notify  => Exec["${target_path} syntax check"]
   }
 
-  # Execs
-  exec { "${target_path} syntax check":
-    path        => ['/bin', '/usr/bin'],
-    command     => "perl -c ${target_path}",
-    refreshonly => true,
-  }
 
 }
