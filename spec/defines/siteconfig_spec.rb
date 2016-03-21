@@ -26,7 +26,6 @@ describe 'rt::siteconfig', :type => :define do
     let(:params) {
       {
         'ensure' => 'present',
-        'order'  => '99',
       }
     }
     context 'should have a properly value defined ' do
@@ -35,7 +34,7 @@ describe 'rt::siteconfig', :type => :define do
           'param1'              => 'test value1',
           'param2'              => 'test value2',
         }})
-        should contain_file('/etc/rt/RT_SiteConfig.d/99-Test.pm').with(
+        should contain_file('/etc/rt/RT_SiteConfig.d/Test.pm').with(
           {
             'ensure'  => 'present',
             'mode'    => '0640',
@@ -57,7 +56,7 @@ Set(%Test,
           'param1',
           'param2',
         ]})
-        should contain_file('/etc/rt/RT_SiteConfig.d/99-Test.pm').with(
+        should contain_file('/etc/rt/RT_SiteConfig.d/Test.pm').with(
           {
             'ensure'  => 'present',
             'mode'    => '0640',
@@ -75,10 +74,10 @@ Set(@Test,
         )
       end
       it 'String' do
-        params.merge!({ 
+        params.merge!({
           'value' => 'Test value'
         })
-        should contain_file('/etc/rt/RT_SiteConfig.d/99-Test.pm').with(
+        should contain_file('/etc/rt/RT_SiteConfig.d/Test.pm').with(
           {
             'ensure'  => 'present',
             'mode'    => '0640',
@@ -94,7 +93,7 @@ Set($Test, 'Test value');
       end
     end
     it "should do syntax check" do
-      params.merge!({ 
+      params.merge!({
         'value' => 'Test value'
       })
       should contain_exec("Test syntax check")

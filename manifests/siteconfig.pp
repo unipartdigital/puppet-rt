@@ -27,7 +27,6 @@
 define rt::siteconfig (
   $value  = undef,
   $ensure = 'present',
-  $order  = '99',
 ) {
 
   include ::rt::params
@@ -36,9 +35,6 @@ define rt::siteconfig (
     '^absent$',
     '^present$'
   ])
-  validate_string(
-    $order
-  )
 
   if $value {
     if is_hash($value) {
@@ -63,7 +59,7 @@ define rt::siteconfig (
     $web_group
   )
 
-  $target_path = "${config_d}/${order}-${title}.pm"
+  $target_path = "${config_d}/${title}.pm"
 
   # Execs
   if $ensure == 'present' {
