@@ -15,14 +15,12 @@ define rt::siteconfig (
   )
 
   if $value {
-    if $value.is_a(String) {
-      validate_string($value)
-    } elsif $value.is_a(Hash) {
+    if is_hash($value) {
       validate_hash($value)
-    } elsif $value.is_a(Array) {
+    } elsif is_array($value) {
       validate_array($value)
     } else {
-      fail('Value could be String, Hash or Array')
+      validate_string($value)
     }
   }  else {
     fail("Value must be defined for ${title}")
