@@ -1,46 +1,100 @@
-# Class: rt
-# ===========================
+# == Class: rt
 #
-# Full description of class rt here.
+#  Installs and configures RT (Request tracker:
+#  https://www.bestpractical.com/rt/)
 #
-# Parameters
-# ----------
+# === Parameters
 #
-# Document parameters here.
+#  [*siteconfig*]
+#     A hash of RT's site confirutaion options. Check
+#     https://docs.bestpractical.com/rt/4.4.0/RT_Config.html for available
+#     configurtion options. This hash is merged with defaultsiteconfig (check
+#     below) and the result of  the merge is push to RT's siteconfig file 
+#     defined by config_site parameter
 #
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
+#     Type: Hash
+#     Default: {}
 #
-# Variables
-# ----------
+#  [*ensure*]
+#     Global ensure for all resources in module
 #
-# Here you should define a list of variables that this module would require.
+#     Type: String
+#     Available values: 'present', 'absent'
+#     Default: present
 #
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
+#  [*package*]
+#     The name of package(s) that provides RT
 #
-# Examples
-# --------
+#     Type: String or Array
+#     Default: rt
 #
-# @example
-#    class { 'rt':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
-#    }
+#  [*package_ensure*]
+#     The state of RT package. If ensure paramter is present then 'present',
+#     'installed', 'absent', 'purged', 'held', 'latest' should be used for
+#     package_ensure.
+#    
+#     Type: String
+#     Available values:'present', 'installed', 'absent', 'purged', 'held',
+#                     'latest' 
+#     Default: present
 #
-# Authors
-# -------
+#  [*config_dir*]
+#     The absolute path to the directory where RT's configuration  files are.
+#     
+#     Type: String
+#     Default: /etc/rt
+#     
+#  [*config_d*]
+#     The absolute path to the directory where additional RT's configuration  
+#     files are.
 #
-# Author Name <author@domain.com>
+#     Type: String
+#     Default: /etc/rt/RT_SiteConfig.d
 #
-# Copyright
-# ---------
+#  [*config_site*]
+#     The absolute path to the main RT's configuration file
 #
-# Copyright 2016 Your name here, unless otherwise noted.
+#     Type: String
+#     Default: /etc/rt/RT_SiteConfig.pm
+#
+#  [*user*]
+#     The owner of config_dir directory
+#
+#     Type: String
+#     Default: root
+#
+#  [*group*]
+#     The group for config_dir directory 
+#
+#     Type: String
+#     Default: root
+#
+#  [*web_user*]
+#     The web user name to read RT's site configuration files
+#
+#     Type: String
+#     Default: apache
+#
+#  [*web_group*]
+#     The web group name to read RT's site configuration files
+#
+#     Type: String
+#     Default: apache
+#
+#  [*defaultsiteconfig*]
+#     The default site configuration hash. This hash is mergerd with siteconfig
+#     hash and used to prepare RT's site configuration file
+#     
+#     Type: Hash
+#     Default: check rt::params class
+#
+# === Authors
+#
+# Anton Baranov <abaranov@linuxfoundation.org>
+#
+# === Copyright
+#
+# Copyright 2016 Anton Baranov
 #
 class rt (
   $siteconfig        = {},

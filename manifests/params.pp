@@ -1,4 +1,19 @@
-# RT::Params
+# == Class rt::params
+#
+#   Default definitions for other classes in that modules
+
+# === Parameters
+#
+#   None
+#
+# === Authors
+#
+# Anton Baranov <abaranov@linuxfoundation.org>
+#
+# === Copyright
+#
+# Copyright 2016 Anton Baranov
+#
 class rt::params {
   $ensure            = 'present'
   $package           = 'rt'

@@ -1,3 +1,29 @@
+# == Define rt::siteconfig
+#
+#   Defines additional site config options using files in conf.d
+#
+# === Parameters
+#
+#   [*ensure*]
+#     State of configuration option
+#
+#     Type: String
+#     Available values: 'present', 'absent'
+#
+#   [*value*]
+#     The value for the configuration option:
+#
+#     Type: String, Hash or Array
+#     Default: undef
+#
+# === Authors
+#
+# Anton Baranov <abaranov@linuxfoundation.org>
+#
+# === Copyright
+#
+# Copyright 2016 Anton Baranov
+#
 define rt::siteconfig (
   $value  = undef,
   $ensure = 'present',
