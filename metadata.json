@@ -2,14 +2,28 @@
   "name": "abaranov-rt",
   "version": "0.1.0",
   "author": "abaranov",
-  "summary": null,
+  "summary": "Module manages Request Tracker(https://bestpractical.com/rt-and-rtir/)",
   "license": "Apache-2.0",
-  "source": "",
-  "project_page": null,
-  "issues_url": null,
+  "source": "https://github.com/lfit/puppet-rt",
+  "project_page": "https://github.com/lfit/puppet-rt",
+  "issues_url": "https://github.com/lfit/puppet-rt/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.6.0 <5.0.0"}
   ],
-  "data_provider": null
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    }
+  ]
 }
-

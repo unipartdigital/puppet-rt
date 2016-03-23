@@ -1,83 +1,99 @@
-# rt [![Build Status](https://travis-ci.org/spacedog/puppet-rt.svg)](https://travis-ci.org/spacedog/puppet-rt)
+# Puppet-RT [![Build Status](https://travis-ci.org/spacedog/puppet-rt.svg)](https://travis-ci.org/spacedog/puppet-rt)
 
 #### Table of Contents
 
 1. [Description](#description)
-1. [Setup - The basics of getting started with rt](#setup)
-    * [What rt affects](#what-rt-affects)
+2. [Setup - The basics of getting started with puppet-rt](#setup)
+    * [What puppet-rt affects](#what-rt-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with rt](#beginning-with-rt)
-1. [Usage - Configuration options and additional functionality](#usage)
-1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development - Guide for contributing to the module](#development)
+    * [Beginning with puppet-rt](#beginning-with-rt)
+3. [Usage - Configuration options and additional functionality](#usage)
+4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+5. [Limitations - OS compatibility, etc.](#limitations)
 
-## Description
+## Overview
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
+This module manages installation and configuration Request Tracker (RT)
+installation and configuration
 
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
+## Module Description
+
+Module installs and configures RT.
 
 ## Setup
 
-### What rt affects **OPTIONAL**
+### What puppet-rt affects
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
++ Module installs (including dependencies):
+  * rt
 
-If there's more that they should know about, though, this is the place to mention:
+  This can be overwritten using *_package_* parameter of *_rt_* class
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
++ Modules manages files:
+  * /etc/rt/RT_SiteConfig.pm
+  * /etc/rt/RT_SiteConfig.d/*.pm
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+puppetlabs/stdlib
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
+### Beginning with puppet-rt
 
-### Beginning with rt
-
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
+For a basic  setup with a default configuration parameters it's just
+enough to declare rt class inside the manifest
+```puppet
+include ::rt
+```
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+To pass any configuration parameters the *siteconfig* hash parameter is used.
+*siteconfig* is merged with *defaultsiteconfig* from _params.pp_ and
+pushed to /etc/rt/RT_SiteConfig.pm configuration file
+
+*siteconfig* must be a hash that contains proper RT's configuration options:
+
+```yaml
+rt::siteconfig:
+  # Base configurations
+  rtname: 'example.com'
+  Organization: 'example'
+  OwnerEmail: 'root@example.com'
+  TimeZone: 'US/Pacific'
+  # Web configurations
+  WebPath: '/rt'
+  WebDefaultStylesheet: 'web2'
+```
+
+```puppet
+include ::rt
+```
+
+The list of all options is available here: https://docs.bestpractical.com/rt/4.4.0/RT_Config.html
+
+Configuration options can be managed using .pm files in /etc/rt/RT_SiteConfig.d
+directory. This is implemented using _rt::siteconfig_ define.
+
+```yaml
+rt::siteconfigs:
+  rtname:
+    value: 'example.com'
+  WebPath:
+    value: '/rt'
+```
+
+```puppet
+$siteconfigs = hiera('rt::siteconfigs', {})
+validate_hash($siteconfigs)
+create_resources('rt::siteconfig', $siteconfigs)
+```
 
 ## Reference
 
-Here, include a complete list of your module's classes, types, providers,
-facts, along with the parameters for each. Users refer to this section (thus
-the name "Reference") to find specific details; most users don't read it per
-se.
+None
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc. If there
-are Known Issues, you might want to include them under their own heading here.
-
-## Development
-
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
++ osfamily => RedHat
++ if getenforce == Enforcing
+  * setsebool -P httpd_can_sendmail 1 1
