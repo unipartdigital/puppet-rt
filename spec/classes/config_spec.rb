@@ -33,8 +33,9 @@ describe('rt::config') do
       'config_d'          => '/etc/rt/RT_SiteConfig.d',
       'siteconfig'        => {},
       'defaultsiteconfig' => {
-        'rtname'  => 'example.com',
-        'WebPath' => '/rt',
+        'rtname'          => 'example.com',
+        'DatabaseType'    => 'mysql',
+        'Plugins'         => 'SEE_EXTENTIONS.PP',
       }
     }
   }
@@ -51,14 +52,14 @@ describe('rt::config') do
   }
   it { should contain_file('/etc/rt/RT_SiteConfig.pm').with(
     {
-      'ensure' => 'present',
-      'owner'  => 'apache',
-      'group'  => 'apache',
-      'mode'   => '0640',
+      'ensure'  => 'present',
+      'owner'   => 'apache',
+      'group'   => 'apache',
+      'mode'    => '0640',
       'content' => "# This file is managed by puppet
 use utf8;
 Set($rtname, 'example.com');
-Set($WebPath, '/rt');
+Set($DatabaseType, 'mysql');
 1;
 "
     }

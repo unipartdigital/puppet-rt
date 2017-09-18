@@ -26,11 +26,11 @@
 #
 define rt::siteconfig (
   $value  = undef,
-  $ensure = 'present',
+  $ensure = 'present'
 ) {
 
   include ::rt::params
-  # Valitaion
+  # Validation
   validate_re($ensure, [
     '^absent$',
     '^present$'
@@ -66,21 +66,19 @@ define rt::siteconfig (
     exec { "${title} syntax check":
       path        => ['/bin', '/usr/bin'],
       command     => "perl -c ${target_path}",
-      refreshonly => true,
+      refreshonly => true
     }
     File[$target_path] {
-      notify  => Exec["${title} syntax check"]
+      notify      => Exec["${title} syntax check"]
     }
   }
 
   # Files and Directories
   file { $target_path:
-    ensure  => $ensure,
-    mode    => '0640',
-    owner   => $web_user,
-    group   => $web_group,
-    content => template("${module_name}/RT_SiteConfig-fragment.pm.erb"),
+    ensure        => $ensure,
+    mode          => '0640',
+    owner         => $web_user,
+    group         => $web_group,
+    content       => template("${module_name}/RT_SiteConfig-fragment.pm.erb")
   }
-
-
 }

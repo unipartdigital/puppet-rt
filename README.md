@@ -8,17 +8,18 @@
     * [Setup requirements](#setup-requirements)
     * [Beginning with puppet-rt](#beginning-with-rt)
 3. [Usage - Configuration options and additional functionality](#usage)
+    * [Create a Request Tracker queue](#create-a-request-tracker-queue)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
 
 ## Overview
 
-This module manages installation and configuration Request Tracker (RT)
+This module manages source installation and configuration Request Tracker (RT)
 installation and configuration
 
 ## Module Description
 
-Module installs and configures RT.
+Module source installs and configures RT.
 
 ## Setup
 
@@ -35,7 +36,12 @@ Module installs and configures RT.
 
 ### Setup Requirements
 
-puppetlabs/stdlib
++ puppetlabs-stdlib
++ puppetlabs-mysql
++ puppetlabs-apache
++ puppet-mariadb
++ meltwater-cpan
++ example42-puppi
 
 ### Beginning with puppet-rt
 
@@ -54,38 +60,76 @@ pushed to /etc/rt/RT_SiteConfig.pm configuration file
 *siteconfig* must be a hash that contains proper RT's configuration options:
 
 ```yaml
-rt::siteconfig:
-  # Base configurations
-  rtname: 'example.com'
-  Organization: 'example'
-  OwnerEmail: 'root@example.com'
-  TimeZone: 'US/Pacific'
-  # Web configurations
-  WebPath: '/rt'
-  WebDefaultStylesheet: 'web2'
+        rt::siteconfig:
+                # Base configurations
+                $rtname: 'example.com'
+          $Organization: 'example'
+            $OwnerEmail: 'root@example.com'
+              $TimeZone: 'US/Pacific'
+               # Web configurations
+          $DatabaseType: 'mysql'
+  $WebDefaultStylesheet: 'web2'
 ```
 
 ```puppet
 include ::rt
 ```
 
-The list of all options is available here: https://docs.bestpractical.com/rt/4.4.0/RT_Config.html
+The list of all options is available here: https://docs.bestpractical.com/rt/4.4.2/RT_Config.html
 
 Configuration options can be managed using .pm files in /etc/rt/RT_SiteConfig.d
 directory. This is implemented using _rt::siteconfig_ define.
 
 ```yaml
 rt::siteconfigs:
-  rtname:
-    value: 'example.com'
-  WebPath:
-    value: '/rt'
+         $rtname:
+           value: 'example.com'
+   $DatabaseType:
+           value: 'mysql'
 ```
 
 ```puppet
 $siteconfigs = hiera('rt::siteconfigs', {})
 validate_hash($siteconfigs)
 create_resources('rt::siteconfig', $siteconfigs)
+```
+
+To install the Request Tracker RT::Authen::ExternalAuth extension
+
+```puppet
+    class { "rt::ext::externalauth": }
+```
+
+To install Request Tracker mailgate
+
+```puppet
+    class { "rt::mailgate": }
+```
+    
+### Create a Request Tracker queue
+
+*!NOTICE!* Your RT *root* user's password will be exposed in your puppet manifest. Ensure
+site.pp and or node configuration is properly secured so only puppet can read
+it.
+
+Configure the rt command line tool
+
+```puppet
+class { "rt::tool": 
+    rt_user     => "root",
+    rt_passwd   => "password",
+    rt_server   => "http://rt.domain.com"
+    }
+```
+
+Define your queue
+
+```puppet
+rt::queue { "queue1":
+    description     => "RT queue 1",
+    reply_email     => "rtq1@domain.com",
+    comment_email   => "rtq1-comments@domain.com"
+    }
 ```
 
 ## Reference
@@ -95,5 +139,3 @@ None
 ## Limitations
 
 + osfamily => RedHat
-+ if getenforce == Enforcing
-  * setsebool -P httpd_can_sendmail 1 1
