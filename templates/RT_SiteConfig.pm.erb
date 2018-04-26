@@ -4,7 +4,7 @@ use utf8;
   <%- if key[0..0] == '%' -%>
 Set(<%= key %>,
 <% value.sort.each do |k,v| -%>
-  '<%= k %>' => '<%= v %>',
+  <%= k %> => <%= v %>,
 <%- end -%>
 );
 <%- elsif key[0..0] == '@' -%>
