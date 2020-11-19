@@ -5,8 +5,7 @@ class rt::perl (
 
   # Dependencies for Perl modules.
   # Please put new packages in alpha order with the old ones or note why you didn't.
-  $perl_dependencies = ["gd",
-               "gd-devel",
+  $perl_dependencies = [ "gd-devel",
                "gd",
                "openssl-devel",
                "perl-GD",
