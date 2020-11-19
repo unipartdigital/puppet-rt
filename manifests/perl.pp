@@ -7,7 +7,7 @@ class rt::perl (
   # Please put new packages in alpha order with the old ones or note why you didn't.
   $perl_dependencies = ["gd",
                "gd-devel",
-               "libgd",
+               "gd",
                "openssl-devel",
                "perl-GD",
                "perl-GraphViz",
